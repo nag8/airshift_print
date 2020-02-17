@@ -21,3 +21,6 @@ airshiftの当日プリントを行うツールです。
     - SITE : 拠点が複数ある場合を想定している。上から何番目か(0始まり)
 - result
 
+送信に利用するGmailアカウントで「安全性の低いアプリのアクセス」を許可する必要がある。
+Googleアカウント「セキュリティ」の下部にて設定する。
+(https://myaccount.google.com/security)
