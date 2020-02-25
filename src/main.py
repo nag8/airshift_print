@@ -25,6 +25,8 @@ def main():
 
 # 画面遷移しスクリーンショットを保存
 def getScreenShot(config):
+
+    
     driver = webdriver.Chrome()
     driver.get('https://airshift.jp/sft/dailyshift')
 
@@ -45,8 +47,9 @@ def getScreenShot(config):
     select = Select(driver.find_element_by_name('filter-staff'))
     select.select_by_value('fixed')
 
-    driver.find_elements_by_class_name('root___1ZI4hW8s')[0].click()
+    driver.find_elements_by_class_name('content___vochnIhs')[0].click()
     time.sleep(2)
+
     driver.save_screenshot(config['FILE'])
 
     driver.quit()
