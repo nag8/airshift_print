@@ -4,14 +4,18 @@ airshiftの当日プリントを行うツールです。
 また、白黒化も行います。
 
 # 準備
+## pythonのインストール
+https://prog-8.com/docs/python-env
 
-- python
-- pip
+## pipのインストール
+https://4to.pics/article/post/54
+
+## 他コマンド
 - pip install Pillow
 - pip install selenium
 - pip install pyyaml
 
-
+## 他設定
 以下ファイル、フォルダの作成
 - config/config.yml
   - 中身
