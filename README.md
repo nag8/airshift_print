@@ -10,6 +10,9 @@ https://prog-8.com/docs/python-env
 ## pipのインストール
 https://4to.pics/article/post/54
 
+## slack_catの設定
+https://qiita.com/keitatata/items/91e0f333061f88285b22
+
 ## 他コマンド
 - pip install Pillow
 - pip install selenium
@@ -28,3 +31,5 @@ https://4to.pics/article/post/54
 送信に利用するGmailアカウントで「安全性の低いアプリのアクセス」を許可する必要がある。
 Googleアカウント「セキュリティ」の下部にて設定する。
 (https://myaccount.google.com/security)
+
+

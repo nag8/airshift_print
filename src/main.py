@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import Select
 
 from PIL import Image
 import sys
+import subprocess
 
 from smtplib import SMTP
 from email.mime.text import MIMEText
@@ -19,8 +20,10 @@ def main():
         config = yaml.load(file, Loader=yaml.SafeLoader)
     
     getScreenShot(config)
-    monochrome(config)
-    sendGmailAttach(config)
+
+    # monochrome(config)
+    # sendGmailAttach(config)
+    sendSlack(config)
     print('finish!')
 
 # 画面遷移しスクリーンショットを保存
@@ -88,6 +91,9 @@ def sendGmailAttach(config):
     gmail.starttls()
     gmail.login(sender, password)
     gmail.send_message(msg)
+
+def sendSlack(config):
+    subprocess.call(["slackcat", "--channel", config['SLACK_CHANNEL'], "--filename","シフト.png", config['FILE']])
 
 if __name__ == '__main__':
     main()
