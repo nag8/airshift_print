@@ -54,6 +54,8 @@ def getScreenShot(config):
     time.sleep(2)
 
     driver.save_screenshot(config['FILE'])
+    print("take photo")
+    time.sleep(10)
 
     driver.quit()
 
