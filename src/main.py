@@ -23,6 +23,12 @@ def main():
 
     with open('../config/config.yml') as file:
         config = yaml.load(file, Loader=yaml.SafeLoader)
+
+    with open('shift.csv', 'w') as f:
+        writer = csv.writer(f)
+        writer.writerow([datetime.date.today()])
+    
+    f.close()
     
     for i in range(3):
         getScreenShot(config, i)
@@ -64,9 +70,8 @@ def getScreenShot(config, siteRow):
     names = soup.findAll('div',class_="name___1yaaRDba")
     siteList = ["渋谷","難波","新宿"]
 
-    with open('sample_writer_row.csv', 'a') as f:
+    with open('shift.csv', 'a') as f:
         writer = csv.writer(f)
-        writer.writerow([datetime.date.today()])
         for name in names:
             writer.writerow([name.text.replace('z', '').replace('(AI)', ''),siteList[siteRow]])
 
@@ -78,7 +83,7 @@ def getScreenShot(config, siteRow):
 
     driver.quit()
 
-    # sendSlack(config, siteList[siteRow])
+    sendSlack(config, siteList[siteRow])
 
 # 画像を白黒化
 def monochrome(config):
