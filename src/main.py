@@ -38,51 +38,53 @@ def main():
 
 # 画面遷移しスクリーンショットを保存
 def getScreenShot(config, siteRow):
-
     
-    driver = webdriver.Chrome()
-    driver.get('https://airshift.jp/sft/dailyshift')
+    options = webdriver.ChromeOptions()
+    options.add_argument('--kiosk')
+    driver = webdriver.Chrome(options=options)
+    try:
+        driver.get('https://airshift.jp/sft/dailyshift')
 
-    # ログイン画面
-    driver.find_element_by_name('username').send_keys(config['ID'])
-    driver.find_element_by_name('password').send_keys(config['PASS'])
-    driver.find_element_by_id('command').submit()
+        # ログイン画面
+        driver.find_element_by_name('username').send_keys(config['ID'])
+        driver.find_element_by_name('password').send_keys(config['PASS'])
+        driver.find_element_by_id('command').submit()
 
-    time.sleep(1)
+        time.sleep(1)
 
-    # 拠点選択画面
-    elements = driver.find_elements_by_class_name('searchTarget')
-    elements[siteRow].click()
+        # 拠点選択画面
+        elements = driver.find_elements_by_class_name('searchTarget')
+        elements[siteRow].click()
 
-    # デイリーレポート画面
-    driver.get('https://airshift.jp/sft/dailyshift')
-    time.sleep(2)
-    select = Select(driver.find_element_by_name('filter-staff'))
-    select.select_by_value('fixed')
+        # デイリーレポート画面
+        driver.get('https://airshift.jp/sft/dailyshift')
+        time.sleep(2)
+        select = Select(driver.find_element_by_name('filter-staff'))
+        select.select_by_value('fixed')
 
-    driver.find_elements_by_class_name('content___vochnIhs')[0].click()
-    time.sleep(2)
+        driver.find_elements_by_class_name('content___vochnIhs')[0].click()
+        time.sleep(2)
 
-    html = driver.page_source
-    soup = bs4.BeautifulSoup(html, 'html.parser')
+        html = driver.page_source
+        soup = bs4.BeautifulSoup(html, 'html.parser')
 
-    names = soup.findAll('div',class_="name___1yaaRDba")
-    siteList = ["渋谷","難波","新宿"]
+        names = soup.findAll('div',class_="name___1yaaRDba")
+        siteList = ["渋谷","難波","新宿"]
 
-    with open('shift.csv', 'a') as f:
-        writer = csv.writer(f)
-        for name in names:
-            writer.writerow([name.text.replace('z', '').replace('(AI)', ''),siteList[siteRow]])
+        with open('shift.csv', 'a') as f:
+            writer = csv.writer(f)
+            for name in names:
+                writer.writerow([name.text.replace('z', '').replace('(AI)', ''),siteList[siteRow]])
 
-    f.close() # CSVファイルを閉じる
-
-    driver.save_screenshot(config['FILE'])
-    print("take photo")
-    time.sleep(20)
-
-    driver.quit()
-
-    sendSlack(config, siteList[siteRow])
+        f.close()
+        driver.save_screenshot(config['FILE'])
+        print("take photo")
+        time.sleep(20)
+        sendSlack(config, siteList[siteRow])
+    except Exception as e:
+        print(e)
+    finally:
+        driver.quit()
 
 def printShift(config):
     monochrome(config)
