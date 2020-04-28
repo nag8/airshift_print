@@ -13,6 +13,9 @@ https://4to.pics/article/post/54
 ## slack_catの設定
 https://qiita.com/keitatata/items/91e0f333061f88285b22
 
+## safariの設定
+https://qiita.com/hujuu/items/ef89c34fca955cc571ec#safari
+
 ## 他コマンド
 - pip install Pillow
 - pip install selenium

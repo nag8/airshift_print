@@ -30,7 +30,7 @@ def main():
     
     f.close()
     
-    for i in range(3):
+    for i in range(1):
         getScreenShot(config, i)
         # printShift(config)
 
@@ -40,7 +40,7 @@ def main():
 def getScreenShot(config, siteRow):
 
     
-    driver = webdriver.Chrome()
+    driver = webdriver.Safari()
     driver.get('https://airshift.jp/sft/dailyshift')
 
     # ログイン画面
@@ -48,15 +48,16 @@ def getScreenShot(config, siteRow):
     driver.find_element_by_name('password').send_keys(config['PASS'])
     driver.find_element_by_id('command').submit()
 
-    time.sleep(1)
+    time.sleep(3)
 
     # 拠点選択画面
     elements = driver.find_elements_by_class_name('searchTarget')
     elements[siteRow].click()
+    time.sleep(5)
 
     # デイリーレポート画面
     driver.get('https://airshift.jp/sft/dailyshift')
-    time.sleep(2)
+    time.sleep(5)
     select = Select(driver.find_element_by_name('filter-staff'))
     select.select_by_value('fixed')
 
@@ -75,10 +76,12 @@ def getScreenShot(config, siteRow):
             writer.writerow([name.text.replace('z', '').replace('(AI)', ''),siteList[siteRow]])
 
     f.close() # CSVファイルを閉じる
-
+    w = driver.execute_script('return document.body.scrollWidth')
+    h = driver.execute_script('return document.body.scrollHeight')
+    driver.set_window_size(w, h)
     driver.save_screenshot(config['FILE'])
     print("take photo")
-    time.sleep(20)
+    time.sleep(2)
 
     driver.quit()
 
