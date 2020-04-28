@@ -2,3 +2,5 @@
 config
 result
 .DS_Store
+src/sample_writer_row.csv
+src/shift.csv
