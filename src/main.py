@@ -85,8 +85,8 @@ def getScreenShot(config, siteRow):
     sendSlack(config, siteList[siteRow])
 
 def printShift(config):
-    # monochrome(config)
-    # sendGmailAttach(config)
+    monochrome(config)
+    sendGmailAttach(config)
 
 # 画像を白黒化
 def monochrome(config):
