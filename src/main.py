@@ -32,9 +32,8 @@ def main():
     
     for i in range(3):
         getScreenShot(config, i)
+        # printShift(config)
 
-        # monochrome(config)
-        # sendGmailAttach(config)
     print('finish!')
 
 # 画面遷移しスクリーンショットを保存
@@ -84,6 +83,10 @@ def getScreenShot(config, siteRow):
     driver.quit()
 
     sendSlack(config, siteList[siteRow])
+
+def printShift(config):
+    # monochrome(config)
+    # sendGmailAttach(config)
 
 # 画像を白黒化
 def monochrome(config):
