@@ -52,6 +52,8 @@ def getShiftData(config, placeId):
         # デイリーレポート画面
         # 日時指定する場合は、URLを以下などに変更すること
         # https://airshift.jp/sft/dailyshift/20200502
+        # 今日
+        # https://airshift.jp/sft/dailyshift
         driver.get('https://airshift.jp/sft/dailyshift')
         time.sleep(2)
         select = Select(driver.find_element_by_name('filter-staff'))
@@ -72,7 +74,7 @@ def getShiftData(config, placeId):
             csvlist.append([name.text.replace('z', '').replace('(AI)', ''),siteList[placeId]])
 
         driver.save_screenshot(config['FILE'])
-        sendSlack(config, siteList[placeId])
+        # sendSlack(config, siteList[placeId])
         print("take photo")
         time.sleep(20)
 
