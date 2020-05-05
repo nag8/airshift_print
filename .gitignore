@@ -4,3 +4,4 @@ result
 .DS_Store
 src/sample_writer_row.csv
 src/shift.csv
+src/__pycache__/mail.cpython-38.pyc

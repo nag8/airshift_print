@@ -21,7 +21,7 @@ def main():
         config = yaml.load(file, Loader=yaml.SafeLoader)
 
     csvList = []
-    for i in range(1):
+    for i in range(3):
         csvList.extend(getShiftData(config, i))
         
         # printShift(config)
