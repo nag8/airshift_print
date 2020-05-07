@@ -9,13 +9,15 @@ import datetime
 from PIL import Image
 import sys
 import subprocess
-import csv 
+import csv
+import logging
+import traceback
 
 # local
 import mail
 
 def main():
-    print('start...')
+    print('start...')    
 
     with open('../config/config.yml') as file:
         config = yaml.load(file, Loader=yaml.SafeLoader)
@@ -54,7 +56,16 @@ def getShiftData(config, placeId):
         # https://airshift.jp/sft/dailyshift/20200502
         # 今日
         # https://airshift.jp/sft/dailyshift
-        driver.get('https://airshift.jp/sft/dailyshift')
+        
+        url = 'https://airshift.jp/sft/dailyshift'
+        
+        dayFlg = False
+        if len(sys.argv) > 1:
+            dayFlg = True
+            url = 'https://airshift.jp/sft/dailyshift/' + sys.argv[1]
+
+    
+        driver.get(url)
         time.sleep(2)
         select = Select(driver.find_element_by_name('filter-staff'))
         select.select_by_value('fixed')
@@ -74,14 +85,17 @@ def getShiftData(config, placeId):
             csvlist.append([name.text.replace('z', '').replace('(AI)', ''),siteList[placeId]])
 
         driver.save_screenshot(config['FILE'])
-        # sendSlack(config, siteList[placeId])
+        
+        if not dayFlg:
+            sendSlack(config, siteList[placeId])
+            
         print("take photo")
         time.sleep(20)
 
         return csvlist
         
     except Exception as e:
-        print(e)
+        logging.error(traceback.format_exc())
         return [[]]
     finally:
         driver.quit()
