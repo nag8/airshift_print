@@ -53,7 +53,7 @@ def getShiftData(config, placeId):
 
         # デイリーレポート画面
         # 日時指定する場合は、URLを以下などに変更すること
-        # https://airshift.jp/sft/dailyshift/20200502
+        # https://airshift.jp/sft/dailyshift/20200510
         # 今日
         # https://airshift.jp/sft/dailyshift
         
@@ -88,9 +88,8 @@ def getShiftData(config, placeId):
         
         if not dayFlg:
             sendSlack(config, siteList[placeId])
-            
-        print("take photo")
-        time.sleep(20)
+            print("take photo")
+            time.sleep(20)
 
         return csvlist
         
