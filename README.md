@@ -3,6 +3,11 @@
 airshiftの当日プリントを行うツールです。
 また、白黒化も行います。
 
+$ cd src
+$ python shift.py
+
+$ python shift.py 20200514
+
 # 準備
 ## pythonのインストール
 https://prog-8.com/docs/python-env

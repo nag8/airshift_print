@@ -23,7 +23,7 @@ def main():
         config = yaml.load(file, Loader=yaml.SafeLoader)
 
     csvList = []
-    for i in range(3):
+    for i in range(1):
         csvList.extend(getShiftData(config, i))
         
         # printShift(config)
@@ -52,29 +52,26 @@ def getShiftData(config, placeId):
         elements[placeId].click()
 
         # デイリーレポート画面
-        # 日時指定する場合は、URLを以下などに変更すること
-        # https://airshift.jp/sft/dailyshift/20200510
-        # 今日
-        # https://airshift.jp/sft/dailyshift
+        # url = 'https://airshift.jp/sft/dailyshift'
         
-        url = 'https://airshift.jp/sft/dailyshift'
-        
-        dayFlg = False
-        if len(sys.argv) > 1:
-            dayFlg = True
-            url = 'https://airshift.jp/sft/dailyshift/' + sys.argv[1]
+        # dayFlg = False
+        # if len(sys.argv) > 1:
+        #     dayFlg = True
+        #     url = 'https://airshift.jp/sft/dailyshift/' + sys.argv[1]
 
     
-        driver.get(url)
+        driver.get('https://airshift.jp/sft/monthlyshift')
         time.sleep(2)
-        select = Select(driver.find_element_by_name('filter-staff'))
-        select.select_by_value('fixed')
+        # select = Select(driver.find_element_by_name('filter-staff'))
+        # select.select_by_value('fixed')
 
         driver.find_elements_by_class_name('content___vochnIhs')[0].click()
-        time.sleep(2)
+        time.sleep(4)
 
         html = driver.page_source
         soup = bs4.BeautifulSoup(html, 'html.parser')
+        
+        print(soup)
 
         names = soup.findAll('div',class_="name___1yaaRDba")
         siteList = ["渋谷","難波","新宿"]
@@ -85,6 +82,8 @@ def getShiftData(config, placeId):
             csvlist.append([name.text.replace('z', '').replace('(AI)', ''),siteList[placeId]])
 
         driver.save_screenshot(config['FILE'])
+        
+        dayFlg = True
         
         if not dayFlg:
             sendSlack(config, siteList[placeId])
