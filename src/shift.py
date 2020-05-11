@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import Select
 import bs4
 import re
 import datetime
+import json
 
 from PIL import Image
 import sys
@@ -34,9 +35,29 @@ def main():
 # 画面遷移しスクリーンショットを保存
 def getShiftData(config, placeId):
     
-    options = webdriver.ChromeOptions()
-    options.add_argument('--kiosk')
-    driver = webdriver.Chrome(options=options)
+    
+    chopt=webdriver.ChromeOptions()
+    appState = {
+        "recentDestinations": [
+            {
+                "id": "Save as PDF",
+                "origin": "local",
+                "account":""
+            }
+        ],
+        "selectedDestinationId": "Save as PDF",
+        "version": 2
+    }
+
+    prefs = {'printing.print_preview_sticky_settings.appState': 
+    json.dumps(appState)}
+    chopt.add_experimental_option('prefs', prefs)
+    chopt.add_argument('--kiosk-printing')
+    driver = webdriver.Chrome(executable_path='/Users/ken.n/Desktop/work/chromedriver',options=chopt)
+    
+    # options = webdriver.ChromeOptions()
+    # options.add_argument('--kiosk')
+    # driver = webdriver.Chrome(options=options)
     try:
         driver.get('https://airshift.jp/sft/dailyshift')
 
@@ -73,23 +94,24 @@ def getShiftData(config, placeId):
         driver.find_elements_by_class_name('content___vochnIhs')[0].click()
         time.sleep(2)
 
-        html = driver.page_source
-        soup = bs4.BeautifulSoup(html, 'html.parser')
+        # html = driver.page_source
+        # soup = bs4.BeautifulSoup(html, 'html.parser')
 
-        names = soup.findAll('div',class_="name___1yaaRDba")
-        siteList = ["渋谷","難波","新宿"]
+        # names = soup.findAll('div',class_="name___1yaaRDba")
+        # siteList = ["渋谷","難波","新宿"]
         
-        csvlist = []
+        # csvlist = []
         
-        for name in names:
-            csvlist.append([name.text.replace('z', '').replace('(AI)', ''),siteList[placeId]])
+        # for name in names:
+        #     csvlist.append([name.text.replace('z', '').replace('(AI)', ''),siteList[placeId]])
 
-        driver.save_screenshot(config['FILE'])
+        # driver.save_screenshot(config['FILE'])
         
-        if not dayFlg:
-            sendSlack(config, siteList[placeId])
-            print("take photo")
-            time.sleep(20)
+        # if not dayFlg:
+        #     sendSlack(config, siteList[placeId])
+        #     print("take photo")
+        #     time.sleep(20)
+        driver.execute_script('return window.print()')
 
         return csvlist
         
