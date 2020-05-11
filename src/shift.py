@@ -17,7 +17,7 @@ import traceback
 import mail
 
 def main():
-    print('start...')    
+    print('start...')
 
     with open('../config/config.yml') as file:
         config = yaml.load(file, Loader=yaml.SafeLoader)
@@ -35,7 +35,7 @@ def main():
 def getShiftData(config, placeId):
     
     options = webdriver.ChromeOptions()
-    options.add_argument('--kiosk')
+    options.add_argument('--headless')
     driver = webdriver.Chrome(options=options)
     try:
         driver.get('https://airshift.jp/sft/dailyshift')
@@ -71,6 +71,9 @@ def getShiftData(config, placeId):
         select.select_by_value('fixed')
 
         driver.find_elements_by_class_name('content___vochnIhs')[0].click()
+        page_width = driver.execute_script('return 2500')
+        page_height = driver.execute_script('return 2000')
+        driver.set_window_size(page_width, page_height)
         time.sleep(2)
 
         html = driver.page_source
@@ -88,8 +91,6 @@ def getShiftData(config, placeId):
         
         if not dayFlg:
             sendSlack(config, siteList[placeId])
-            print("take photo")
-            time.sleep(20)
 
         return csvlist
         
