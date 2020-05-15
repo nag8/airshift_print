@@ -91,6 +91,8 @@ def getShiftData(config, placeId):
         
         if not dayFlg:
             sendSlack(config, siteList[placeId])
+            
+        csvlist = list(map(list, set(map(tuple, csvlist))))
 
         return csvlist
         

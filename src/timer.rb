@@ -16,3 +16,4 @@ timer("24:00"){}
 timer("08:00") do
   system("python shift.py")
 end
+  
