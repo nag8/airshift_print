@@ -7,17 +7,10 @@ airshiftの当日プリントを行うツールです。
 ## pythonのインストール
 https://prog-8.com/docs/python-env
 
-## pipのインストール
-https://4to.pics/article/post/54
 
 ## slack_catの設定
 https://qiita.com/keitatata/items/91e0f333061f88285b22
 
-## 他コマンド
-- pip install Pillow
-- pip install selenium
-- brew cask install chromedriver
-- pip install pyyaml
 
 ## 他設定
 以下ファイル、フォルダの作成

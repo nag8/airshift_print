@@ -17,7 +17,6 @@ import traceback
 import mail
 
 def main():
-    print('start...')
 
     with open('../config/config.yml') as file:
         config = yaml.load(file, Loader=yaml.SafeLoader)
