@@ -18,7 +18,7 @@ import mail
 
 def main():
 
-    with open('../config/config.yml') as file:
+    with open('config/config.yml') as file:
         config = yaml.load(file, Loader=yaml.SafeLoader)
 
     csvList = []

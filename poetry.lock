@@ -50,6 +50,14 @@ version = "5.3.1"
 
 [[package]]
 category = "main"
+description = "Job scheduling for humans."
+name = "schedule"
+optional = false
+python-versions = "*"
+version = "0.6.0"
+
+[[package]]
+category = "main"
 description = "Python bindings for Selenium"
 name = "selenium"
 optional = false
@@ -58,6 +66,14 @@ version = "3.141.0"
 
 [package.dependencies]
 urllib3 = "*"
+
+[[package]]
+category = "main"
+description = "Pipe command output to Slack from your terminal!"
+name = "slackcat"
+optional = false
+python-versions = "*"
+version = "2.0.0"
 
 [[package]]
 category = "main"
@@ -81,7 +97,7 @@ secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "pyOpenSSL (>=0
 socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7,<2.0)"]
 
 [metadata]
-content-hash = "46f94b5012cbd127e4b2382a713d4ffa1dedcd99bcccb9cd764bebe32da4e822"
+content-hash = "893749c6a5f2d1171639390ed4a420a433534bc26c615f2851b9cddddf020be9"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -134,9 +150,17 @@ pyyaml = [
     {file = "PyYAML-5.3.1-cp38-cp38-win_amd64.whl", hash = "sha256:95f71d2af0ff4227885f7a6605c37fd53d3a106fcab511b8860ecca9fcf400ee"},
     {file = "PyYAML-5.3.1.tar.gz", hash = "sha256:b8eac752c5e14d3eca0e6dd9199cd627518cb5ec06add0de9d32baeee6fe645d"},
 ]
+schedule = [
+    {file = "schedule-0.6.0-py2.py3-none-any.whl", hash = "sha256:3f895a1036799a25ab9c335de917073e63cf8256920917e932777382f101f08f"},
+    {file = "schedule-0.6.0.tar.gz", hash = "sha256:f9fb5181283de4db6e701d476dd01b6a3dd81c38462a54991ddbb9d26db857c9"},
+]
 selenium = [
     {file = "selenium-3.141.0-py2.py3-none-any.whl", hash = "sha256:2d7131d7bc5a5b99a2d9b04aaf2612c411b03b8ca1b1ee8d3de5845a9be2cb3c"},
     {file = "selenium-3.141.0.tar.gz", hash = "sha256:deaf32b60ad91a4611b98d8002757f29e6f2c2d5fcaf202e1c9ad06d6772300d"},
+]
+slackcat = [
+    {file = "slackcat-2.0.0-py3-none-any.whl", hash = "sha256:8489c6bd36f7f2ad772efd86fa854247afc164cd62434ab28dfd2c57f362e8f7"},
+    {file = "slackcat-2.0.0.tar.gz", hash = "sha256:64c3accbb2484fa3cd1b1194f841ab1ade16150b630726095c511c5fec4e9459"},
 ]
 soupsieve = [
     {file = "soupsieve-1.9.5-py2.py3-none-any.whl", hash = "sha256:bdb0d917b03a1369ce964056fc195cfdff8819c40de04695a80bc813c3cfa1f5"},
