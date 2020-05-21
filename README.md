@@ -9,11 +9,13 @@ https://prog-8.com/docs/python-env
 
 ## コマンド群
 プロジェクト直下のディレクトリで実行してください。
+```
 $ mkdir result && mkdir config && touch config/config.yml
 $ echo ID : <airシフトのID> >> config/config.yml
 $ echo PASS : <airシフトのパスワード> >> config/config.yml
 $ echo FILE : result/result.png >> config/config.yml
 $ echo SLACK_CHANNEL : <投稿したいslackチャンネル名> >> config/config.yml
+```
 
 $ slackcat --configure
 あとは以下サイトを参照
