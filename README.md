@@ -21,7 +21,9 @@ https://qiita.com/keitatata/items/91e0f333061f88285b22#%E8%A8%AD%E5%AE%9A
 
 
 # 実行
-poetry run python src/shift.py 
+poetry run python src/shift.py
+poetry run python src/shift.py 20200530
+
 
 
 
