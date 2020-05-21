@@ -7,6 +7,9 @@ airshiftの当日プリントを行うツールです。
 ## pythonのインストール
 https://prog-8.com/docs/python-env
 
+## poetryのインストール
+https://kitigai.hatenablog.com/entry/2019/10/10/003422
+
 ## コマンド群
 プロジェクト直下のディレクトリで実行してください。
 ```
@@ -18,14 +21,16 @@ $ echo SLACK_CHANNEL : <投稿したいslackチャンネル名> >> config/config
 ```
 
 $ slackcat --configure
+
 あとは以下サイトを参照
 https://qiita.com/keitatata/items/91e0f333061f88285b22#%E8%A8%AD%E5%AE%9A
 
 
 # 実行
-poetry run python src/shift.py
-poetry run python src/shift.py 20200530
-
+```
+$ poetry run python src/shift.py
+$ poetry run python src/shift.py 20200530
+```
 
 
 
