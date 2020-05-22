@@ -1,4 +1,4 @@
-import yaml
+import configparser
 import time
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -8,18 +8,18 @@ import datetime
 
 from PIL import Image
 import sys
-import subprocess
 import csv
 import logging
 import traceback
 
 # local
 import mail
+import slack
 
 def main():
 
-    with open('config/config.yml') as file:
-        config = yaml.load(file, Loader=yaml.SafeLoader)
+    config = configparser.ConfigParser()
+    config.read('config/config.ini', encoding='utf-8')
 
     csvList = []
     for i in range(3):
@@ -40,8 +40,8 @@ def getShiftData(config, placeId):
         driver.get('https://airshift.jp/sft/dailyshift')
 
         # ログイン画面
-        driver.find_element_by_name('username').send_keys(config['ID'])
-        driver.find_element_by_name('password').send_keys(config['PASS'])
+        driver.find_element_by_name('username').send_keys(config['AIRSHIFT']['ID'])
+        driver.find_element_by_name('password').send_keys(config['AIRSHIFT']['PASS'])
         driver.find_element_by_id('command').submit()
 
         time.sleep(1)
@@ -86,10 +86,10 @@ def getShiftData(config, placeId):
         for name in names:
             csvlist.append([name.text.replace('z', '').replace('(AI)', ''),siteList[placeId]])
 
-        driver.save_screenshot(config['FILE'])
+        driver.save_screenshot(config['AIRSHIFT']['FILE'])
         
         if not dayFlg:
-            sendSlack(config, siteList[placeId])
+            slack.sendSlack(siteList[placeId])
             
         csvlist = list(map(list, set(map(tuple, csvlist))))
 
@@ -107,13 +107,11 @@ def printShift(config):
 
 # 画像を白黒化
 def monochrome(config):
-    img = Image.open(config['FILE'])
+    img = Image.open(config['AIRSHIFT']['FILE'])
     img_gray = img.convert('L')
-    img_gray.save(config['FILE'])
+    img_gray.save(config['AIRSHIFT']['FILE'])
 
 
-def sendSlack(config, fileName):
-    subprocess.call(["slackcat", "--channel", config['SLACK_CHANNEL'], "--filename",fileName + ".png", config['FILE']])
 
 if __name__ == '__main__':
     main()
