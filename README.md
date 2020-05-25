@@ -13,7 +13,7 @@ https://kitigai.hatenablog.com/entry/2019/10/10/003422
 ## コマンド群
 プロジェクト直下のディレクトリで実行してください。
 ```
-$ mkdir result && mkdir config && touch config/config.yml
+$ mkdir result && mkdir config && touch config/config.ini
 $ echo ID : <airシフトのID> >> config/config.yml
 $ echo PASS : <airシフトのパスワード> >> config/config.yml
 $ echo FILE : result/result.png >> config/config.yml
