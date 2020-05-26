@@ -35,7 +35,12 @@ def getShiftData(config, placeId):
     
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
-    driver = webdriver.Chrome(executable_path=config['CHROME']['PATH'], options=options)
+    
+    if 'CHROME' in config:
+        driver = webdriver.Chrome(executable_path=config['CHROME']['PATH'], options=options)
+    else:
+        driver = webdriver.Chrome(options=options)
+    
     try:
         driver.get('https://airshift.jp/sft/dailyshift')
 
