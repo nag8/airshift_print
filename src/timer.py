@@ -1,15 +1,13 @@
 import datetime
 import schedule
 import time
-import shift
+import main
 
 def job():
-  shift.main()
-
-
+  main.main()
 
 schedule.every().day.at("08:30").do(job)
-  
+
 while True:
   schedule.run_pending()
   time.sleep(60)
