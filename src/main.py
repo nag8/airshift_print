@@ -25,8 +25,7 @@ def shift():
     config = util.getConfig()
 
     shiftlist = []
-    for i in range(1):
-        shiftlist.extend(getShiftData(config, i))
+    getShiftData(config, 3)
 
         # printShift(config)
 
@@ -37,27 +36,18 @@ def shift():
 # 画面遷移しスクリーンショットを保存
 
 
+# 画面遷移しスクリーンショットを保存
 def getShiftData(config, placeId):
-
+    
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
-
-    if 'CHROME' in config:
-        driver = webdriver.Chrome(
-            executable_path=config['CHROME']['PATH'], options=options)
-    else:
-        driver = webdriver.Chrome(options=options)
-
-    shiftlist = []
-
+    driver = webdriver.Chrome(executable_path=config['CHROME']['PATH'], options=options)
     try:
         driver.get('https://airshift.jp/sft/dailyshift')
 
         # ログイン画面
-        driver.find_element_by_name('username').send_keys(
-            config['AIRSHIFT']['ID'])
-        driver.find_element_by_name('password').send_keys(
-            config['AIRSHIFT']['PASS'])
+        driver.find_element_by_name('username').send_keys(config['AIRSHIFT']['ID'])
+        driver.find_element_by_name('password').send_keys(config['AIRSHIFT']['PASS'])
         driver.find_element_by_id('command').submit()
 
         time.sleep(1)
@@ -71,14 +61,15 @@ def getShiftData(config, placeId):
         # https://airshift.jp/sft/dailyshift/20200510
         # 今日
         # https://airshift.jp/sft/dailyshift
-
+        
         url = 'https://airshift.jp/sft/dailyshift'
-
+        
         dayFlg = False
         if len(sys.argv) > 1:
             dayFlg = True
             url = 'https://airshift.jp/sft/dailyshift/' + sys.argv[1]
 
+    
         driver.get(url)
         time.sleep(2)
         select = Select(driver.find_element_by_name('filter-staff'))
@@ -86,47 +77,34 @@ def getShiftData(config, placeId):
 
         driver.find_elements_by_class_name('content___vochnIhs')[0].click()
         page_width = driver.execute_script('return 2500')
-        page_height = driver.execute_script('return 2000')
+        page_height = driver.execute_script('return 4000')
         driver.set_window_size(page_width, page_height)
         time.sleep(2)
 
-        siteList = ["渋谷", "難波", "新宿"]
+        html = driver.page_source
+        soup = bs4.BeautifulSoup(html, 'html.parser')
+
+        names = soup.findAll('div',class_="name___1yaaRDba")
+        siteList = ["渋谷","難波","新宿","拠点統合"]
+        
+        csvlist = []
+        
+        for name in names:
+            csvlist.append([name.text.replace('z', '').replace('(AI)', ''),siteList[placeId]])
 
         driver.save_screenshot(config['AIRSHIFT']['FILE'])
+        
+        # if not dayFlg:
+        #     slack.sendSlack(siteList[placeId])
+        slack.sendSlack(siteList[placeId])
+            
+        csvlist = list(map(list, set(map(tuple, csvlist))))
 
-        if dayFlg:
-            html = driver.page_source
-            soup = bs4.BeautifulSoup(html, 'html.parser')
-            names = soup.findAll('div', class_="name___1yaaRDba")
-
-            for name in names:
-                hour = getTime(name.parent.find(
-                    "div", attrs={"class": "worktime___1N2NXLC5"}).span.text)
-                name = name.text.replace('z', '').replace('(AI)', '')
-
-                uniqueFlg = True
-
-                for s in shiftlist:
-                    if name == s.name:
-                        s.addHour(hour)
-                        uniqueFlg = False
-
-                if uniqueFlg:
-                    shiftlist.append(
-                        shift.Shift(
-                            name=name,
-                            placeId=placeId,
-                            hour=hour
-                        )
-                    )
-        else:
-            slack.sendSlack(siteList[placeId])
-
-        return shiftlist
-
+        return csvlist
+        
     except Exception as e:
         logging.error(traceback.format_exc())
-        return shiftlist
+        return [[]]
     finally:
         driver.quit()
 
@@ -158,7 +136,7 @@ def duty():
     '\nマニュアル：https://infratop.docbase.io/posts/1538760'
 
     slack.post(
-        url=config['SLACK']['URL_LSINTERNAL'],
+        url=config['SLACK']['URL'],
         text=message
     )
 
