@@ -5,8 +5,7 @@ import main
 import util
 
 def shift():
-    if not util.judgeFriday():
-        main.shift()
+    main.shift()
 
 def duty():
     if not util.judgeFriday():
