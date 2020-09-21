@@ -1,11 +1,13 @@
 import requests
 import json
 import configparser
+import slackweb
+
+import util
 
 def sendSlack(fileName):
     
-    config = configparser.ConfigParser()
-    config.read('config/config.ini', encoding='utf-8')
+    config = util.getConfig()
 
     files = {'file': open(config['AIRSHIFT']['FILE'], 'rb')}
     param = {
@@ -18,6 +20,16 @@ def sendSlack(fileName):
         params=param, 
         files=files)
 
+def post(url='', text=''):
 
+    payload_dic = {
+        'text' : text
+    }
+
+    requests.post(url, data=json.dumps(payload_dic))
+    
+    
 if __name__ == '__main__':
-    sendSlack('神南')
+    post(
+        '<@UMTN0H3DG> aaqaa'
+    )

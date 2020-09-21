@@ -17,41 +17,47 @@ import mail
 import slack
 import shift
 import gsheet
+import util
+
 
 def shift():
 
-    config = configparser.ConfigParser()
-    config.read('config/config.ini', encoding='utf-8')
+    config = util.getConfig()
 
     shiftlist = []
     for i in range(1):
         shiftlist.extend(getShiftData(config, i))
-        
+
         # printShift(config)
 
     for s in shiftlist:
-        
+
         print(s.name, s.placeId, s.hour)
 
 # 画面遷移しスクリーンショットを保存
+
+
 def getShiftData(config, placeId):
-    
+
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
-    
+
     if 'CHROME' in config:
-        driver = webdriver.Chrome(executable_path=config['CHROME']['PATH'], options=options)
+        driver = webdriver.Chrome(
+            executable_path=config['CHROME']['PATH'], options=options)
     else:
         driver = webdriver.Chrome(options=options)
-        
+
     shiftlist = []
-    
+
     try:
         driver.get('https://airshift.jp/sft/dailyshift')
 
         # ログイン画面
-        driver.find_element_by_name('username').send_keys(config['AIRSHIFT']['ID'])
-        driver.find_element_by_name('password').send_keys(config['AIRSHIFT']['PASS'])
+        driver.find_element_by_name('username').send_keys(
+            config['AIRSHIFT']['ID'])
+        driver.find_element_by_name('password').send_keys(
+            config['AIRSHIFT']['PASS'])
         driver.find_element_by_id('command').submit()
 
         time.sleep(1)
@@ -65,15 +71,14 @@ def getShiftData(config, placeId):
         # https://airshift.jp/sft/dailyshift/20200510
         # 今日
         # https://airshift.jp/sft/dailyshift
-        
+
         url = 'https://airshift.jp/sft/dailyshift'
-        
+
         dayFlg = False
         if len(sys.argv) > 1:
             dayFlg = True
             url = 'https://airshift.jp/sft/dailyshift/' + sys.argv[1]
 
-    
         driver.get(url)
         time.sleep(2)
         select = Select(driver.find_element_by_name('filter-staff'))
@@ -85,62 +90,78 @@ def getShiftData(config, placeId):
         driver.set_window_size(page_width, page_height)
         time.sleep(2)
 
-        siteList = ["渋谷","難波","新宿"]
-        
+        siteList = ["渋谷", "難波", "新宿"]
+
         driver.save_screenshot(config['AIRSHIFT']['FILE'])
-        
+
         if dayFlg:
             html = driver.page_source
             soup = bs4.BeautifulSoup(html, 'html.parser')
-            names = soup.findAll('div',class_="name___1yaaRDba")
-            
+            names = soup.findAll('div', class_="name___1yaaRDba")
+
             for name in names:
-                hour = getTime(name.parent.find("div", attrs={"class": "worktime___1N2NXLC5"}).span.text)
+                hour = getTime(name.parent.find(
+                    "div", attrs={"class": "worktime___1N2NXLC5"}).span.text)
                 name = name.text.replace('z', '').replace('(AI)', '')
-                
+
                 uniqueFlg = True
-                
+
                 for s in shiftlist:
                     if name == s.name:
                         s.addHour(hour)
                         uniqueFlg = False
-                        
-                
+
                 if uniqueFlg:
                     shiftlist.append(
                         shift.Shift(
-                            name = name,
-                            placeId = placeId,
-                            hour = hour
+                            name=name,
+                            placeId=placeId,
+                            hour=hour
                         )
                     )
         else:
             slack.sendSlack(siteList[placeId])
 
         return shiftlist
-        
+
     except Exception as e:
         logging.error(traceback.format_exc())
         return shiftlist
     finally:
         driver.quit()
 
+
 def printShift(config):
     monochrome(config)
     sendGmailAttach(config)
 
 # 画像を白黒化
+
+
 def monochrome(config):
     img = Image.open(config['AIRSHIFT']['FILE'])
     img_gray = img.convert('L')
     img_gray.save(config['AIRSHIFT']['FILE'])
-    
+
+
 def getTime(str):
-    return dt.timedelta(hours = int(str[:2]), minutes = int(str[-3:-1]))
+    return dt.timedelta(hours=int(str[:2]), minutes=int(str[-3:-1]))
+
 
 def duty():
+    config = util.getConfig()
     dutyList = gsheet.getTodayDuty()
     
+    # 打刻当番
+    message = '本日の申請確認担当は<@' + gsheet.getMention(dutyList[0]) + '>です。'\
+    '\n当日、10時までの申請分について対応してください。'\
+    '\nマニュアル：https://infratop.docbase.io/posts/1538760'
+
+    slack.post(
+        url=config['SLACK']['URL_LSINTERNAL'],
+        text=message
+    )
+
 
 if __name__ == '__main__':
     duty()
