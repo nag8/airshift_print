@@ -3,11 +3,15 @@ import schedule
 import time
 import main
 
-def job():
-  main.main()
+def shift():
+    main.shift()
 
-schedule.every().day.at("08:30").do(job)
+def duty():
+    main.duty()
+
+schedule.every().day.at("08:30").do(shift)
+schedule.every().day.at("10:00").do(duty)
 
 while True:
-  schedule.run_pending()
-  time.sleep(60)
+    schedule.run_pending()
+    time.sleep(60)

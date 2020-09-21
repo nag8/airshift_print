@@ -16,8 +16,9 @@ import traceback
 import mail
 import slack
 import shift
+import gsheet
 
-def main():
+def shift():
 
     config = configparser.ConfigParser()
     config.read('config/config.ini', encoding='utf-8')
@@ -137,5 +138,9 @@ def monochrome(config):
 def getTime(str):
     return dt.timedelta(hours = int(str[:2]), minutes = int(str[-3:-1]))
 
+def duty():
+    dutyList = gsheet.getTodayDuty()
+    
+
 if __name__ == '__main__':
-    main()
+    duty()
