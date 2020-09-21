@@ -142,4 +142,5 @@ def duty():
 
 
 if __name__ == '__main__':
-    duty()
+    if not util.judgeFriday():
+        print('duty()')

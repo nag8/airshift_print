@@ -1,5 +1,5 @@
 import configparser
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 def getConfig():
     config = configparser.ConfigParser()
@@ -13,4 +13,10 @@ def judgeToday(num):
         return True
     
     return False
+
+def judgeFriday():
+    weekday = date.today().weekday()
+    return weekday == 4
+    return True
+
 
