@@ -36,24 +36,20 @@ def getTodayDuty():
 
     ss = getSS()
     dataList = ss.values_get(
-        '当番!A:E', params={'valueRenderOption': 'FORMULA'})['values']
+        '当番!A:G', params={'valueRenderOption': 'FORMULA'})['values']
     dataList.pop(0)
     dataList.pop(0)
 
     for row in dataList:
         if util.judgeToday(row[0]):
-            return [row[4]]
+            return [row[4], row[5], row[6]]
     return 'error'
 
 
-def getMention(target):
-    
+def getMentionList():
     wks = getWks('メンバー')
-    dataList = wks.get_all_values()
+    return wks.get_all_values()
 
-    for row in dataList:
-        if row[1] == target:
-            return row[2]
 
 
 if __name__ == '__main__':
