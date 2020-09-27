@@ -129,16 +129,17 @@ def duty():
     mentionList = gsheet.getMentionList()
     
     # 打刻当番
-    message = '本日の申請確認担当は<@' + util.getMention(mentionList, dutyList[0]) + '>です。'\
-    '\n当日、10時までの申請分について対応してください。'\
-    '\nマニュアル：https://infratop.docbase.io/posts/1538760'
+    # message = '本日の申請確認担当は<@' + util.getMention(mentionList, dutyList[0]) + '>です。'\
+    # '\n当日、10時までの申請分について対応してください。'\
+    # '\nマニュアル：https://infratop.docbase.io/posts/1538760'
 
-    slack.post(url=config['SLACK']['URL_ST'], text=message)
+    # slack.post(url=config['SLACK']['URL_ST'], text=message)
     
     # その他
-    message = '本日の当番です。'\
-    '\nメンサポ日直：<@' + util.getMention(mentionList, dutyList[1]) + '>'\
-    '\n昼会司会　　：<@' + util.getMention(mentionList, dutyList[2]) + '>'
+    message = '本日の当番です！'\
+        '\n学サポ日直　：<@' + util.getMention(mentionList, dutyList[0]) + '>'\
+        '\nメンサポ日直：<@' + util.getMention(mentionList, dutyList[1]) + '>'\
+        '\n昼会司会　　：<@' + util.getMention(mentionList, dutyList[2]) + '>'
 
     slack.post(url=config['SLACK']['URL_LSI'], text=message)
 
